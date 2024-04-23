@@ -6,7 +6,11 @@ const HomePage = () => {
   return (
     <div>
       <MainCarosal/>
-      <div>
+      <div className='space-y-10- py-20 flex flex-col justify-center'>
+        <HomeSectionCarosal/>
+        <HomeSectionCarosal/>
+        <HomeSectionCarosal/>
+        <HomeSectionCarosal/>
         <HomeSectionCarosal/>
       </div>
     </div>
