@@ -8,11 +8,11 @@ const HomePage = () => {
     <div>
       <MainCarosal/>
       <div className='space-y-10- py-20 flex flex-col justify-center px-05 lg:px-10'>
-        <HomeSectionCarosal data={mens_kurta}/>
-        <HomeSectionCarosal data={mens_kurta}/>
-        <HomeSectionCarosal data={mens_kurta}/>
-        <HomeSectionCarosal data={mens_kurta}/>
-        <HomeSectionCarosal data={mens_kurta}/>
+        <HomeSectionCarosal data={mens_kurta} sectionName={"Men's Kurta"}/>
+        <HomeSectionCarosal data={mens_kurta} sectionName={"Men's Shoes"}/>
+        <HomeSectionCarosal data={mens_kurta} sectionName={"Men's Shirt"}/>
+        <HomeSectionCarosal data={mens_kurta} sectionName={"Wemen's Saree"}/>
+        <HomeSectionCarosal data={mens_kurta} sectionName={"Wemen's Dress"}/>
       </div>
     </div>
   )
