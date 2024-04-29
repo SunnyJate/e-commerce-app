@@ -6,7 +6,8 @@ import {
   ShoppingBagIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { Avatar } from "@mui/material";
+import { Avatar, Button, Menu, MenuItem } from "@mui/material";
+import { deepPurple } from "@mui/material/colors";
 
 const navigation = {
   categories: [
@@ -141,9 +142,31 @@ const navigation = {
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
-
 export default function Navigation() {
   const [open, setOpen] = useState(false);
+
+  const [openAuthModal, setOpenAuthModal] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const openUserMenu = Boolean(anchorEl);
+  const jwt = localStorage.getItem("jwt");
+
+  const handleUserClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleCloseUserMenu = () => {
+    setAnchorEl(null);
+  };
+
+  const handleOpen = () => {
+    setOpenAuthModal(true);
+  };
+  const handleClose = () => {
+    setOpenAuthModal(false);
+  };
+
+  const handleCategoryClick = (category, section, item, close) => {
+    close();
+  };
 
   return (
     <div className="bg-white">
@@ -328,18 +351,15 @@ export default function Navigation() {
           Get free delivery on orders over $100
         </p>
 
-        <nav
-          aria-label="Top"
-          className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
-        >
+        <nav aria-label="Top" className="mx-auto">
           <div className="border-b border-gray-200">
-            <div className="flex h-16 items-center">
+            <div className="flex h-16 items-center px-11">
               <button
                 type="button"
                 className="relative rounded-md bg-white p-2 text-gray-400 lg:hidden"
                 onClick={() => setOpen(true)}
               >
-                <span className="absolute -inset-0.5" />
+                {/* <span className="absolute -inset-0.5" /> */}
                 <span className="sr-only">Open menu</span>
                 <Bars3Icon className="h-6 w-6" aria-hidden="true" />
               </button>
@@ -446,12 +466,19 @@ export default function Navigation() {
                                                 key={item.name}
                                                 className="flex"
                                               >
-                                                <a
-                                                  href={item.href}
-                                                  className="hover:text-gray-800"
+                                                <p
+                                                  onClick={() =>
+                                                    handleCategoryClick(
+                                                      category,
+                                                      section,
+                                                      item,
+                                                      close
+                                                    )
+                                                  }
+                                                  className="cursor-pointer hover:text-grey-800"
                                                 >
                                                   {item.name}
-                                                </a>
+                                                </p>
                                               </li>
                                             ))}
                                           </ul>
@@ -482,65 +509,72 @@ export default function Navigation() {
 
               <div className="ml-auto flex items-center">
                 <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                  {/* <div>
-                    <Avatar className="text-white" onClick={handleUserClick}
-                      
-                    ></Avatar>
-                  </div> */}
-                  <a
-                    href="#"
-                    className="text-sm font-medium text-gray-700 hover:text-gray-800"
-                  >
-                    Sign in
-                  </a>
-                  <span className="h-6 w-px bg-gray-200" aria-hidden="true" />
-                  <a
-                    href="#"
-                    className="text-sm font-medium text-gray-700 hover:text-gray-800"
-                  >
-                    Create account
-                  </a>
+                  {true ? (
+                    <div>
+                      <Avatar
+                        className="text-white"
+                        onClick={handleUserClick}
+                        aria-controls={open ? "basic-menu" : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? "true" : undefined}
+                        sx={{
+                          bgcolor: deepPurple[500],
+                          color: "white",
+                          cursor: "pointer",
+                        }}
+                      >
+                        SJ
+                      </Avatar>
+                      <Menu
+                        id="basic-menu"
+                        anchorEl={anchorEl}
+                        open={openUserMenu}
+                        onClose={handleCloseUserMenu}
+                        MenuListProps={{
+                          "aria-labelledby": "basic-button",
+                        }}
+                      >
+                        <MenuItem onClick={handleCloseUserMenu}>
+                          Profile
+                        </MenuItem>
+                        <MenuItem>My Order</MenuItem>
+                        <MenuItem>Logout</MenuItem>
+                      </Menu>
+                    </div>
+                  ) : (
+                    <Button
+                      onClick={handleOpen}
+                      className="text-sm forn-medium text-grey-700 hover:text-grey-800"
+                    >
+                      Signin
+                    </Button>
+                  )}
                 </div>
-
-                <div className="hidden lg:ml-8 lg:flex">
-                  <a
-                    href="#"
-                    className="flex items-center text-gray-700 hover:text-gray-800"
-                  >
-                    <img
-                      src="https://tailwindui.com/img/flags/flag-canada.svg"
-                      alt=""
-                      className="block h-auto w-5 flex-shrink-0"
-                    />
-                    <span className="ml-3 block text-sm font-medium">CAN</span>
-                    <span className="sr-only">, change currency</span>
-                  </a>
-                </div>
-
-                {/* Search */}
-                <div className="flex lg:ml-6">
-                  <a href="#" className="p-2 text-gray-400 hover:text-gray-500">
-                    <span className="sr-only">Search</span>
-                    <MagnifyingGlassIcon
-                      className="h-6 w-6"
-                      aria-hidden="true"
-                    />
-                  </a>
-                </div>
-
-                {/* Cart */}
-                <div className="ml-4 flow-root lg:ml-6">
-                  <a href="#" className="group -m-2 flex items-center p-2">
-                    <ShoppingBagIcon
-                      className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-                      aria-hidden="true"
-                    />
-                    <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
-                      0
-                    </span>
-                    <span className="sr-only">items in cart, view bag</span>
-                  </a>
-                </div>
+                  
+                    {/*Search*/}
+                    <div className="flex lg:ml-6">
+                      <p className="p-2 text-grey-400 hover:text-grey-500">
+                        <span className="sr-only">Search</span>
+                        <MagnifyingGlassIcon
+                          className="h-6 w-6"
+                          aria-hidden="true"
+                        />
+                      </p>
+                    </div>
+                    {/* Cart */}
+                    <div className="ml-4 flow-root lg:ml-6">
+                      <Button className="group -m-2 flex items-center p-2">
+                        <ShoppingBagIcon
+                          className="h-6 w-6 flex-shrink-0 text-grey-400 group-hover:text-grey-500"
+                          aria-hidden="true"
+                        />
+                        <span className="ml-2 text-sm font-medium text-grey-700 group-hover:text-grey-800">
+                          2
+                        </span>
+                        <span className="sr-only">item in cart, view bag </span>
+                      </Button>
+                    </div>
+                
               </div>
             </div>
           </div>
